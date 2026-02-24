@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Risk Calculator</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+    padding:35px;
+    border-radius:20px;
+    width:380px;
+    box-shadow:0 0 30px rgba(0,0,0,0.6);
+}
+
+h2{text-align:center;margin-bottom:25px;}
+
+label{font-size:14px;opacity:0.8;}
+
+input, select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:18px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    background:rgba(255,255,255,0.1);
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    background:linear-gradient(90deg,#00c853,#69f0ae);
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 15px #00e676;
+}
+
+.result{
+    margin-top:20px;
+    background:rgba(0,0,0,0.3);
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.highlight{
+    color:#00e676;
+    font-weight:bold;
+    font-size:18px;
+}
+
+select{
+    background: rgba(255,255,255,0.1);
+    color:white;
+}
+
+select option{
+    background:#1e2a38;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Forex Risk Calculator</h2>
+
+<label>Select Pair</label>
+<select>
+<option>EUR/USD</option>
+<option>GBP/USD</option>
+</select>
+
+<label>Risk Amount ($ max 3)</label>
+<input type="number" id="risk" value="3" max="3" min="1">
+
+<label>Stop Loss (Pips)</label>
+<input type="number" id="pips" placeholder="Enter stop loss">
+
+<label>Risk Reward Ratio</label>
+<select id="rr">
+<option value="2">1 : 2</option>
+<option value="3">1 : 3</option>
+<option value="4">1 : 4</option>
+</select>
+
+<button onclick="calculate()">Calculate</button>
+
+<div class="result" id="output">
+Enter trade details to calculate
+</div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+let risk = parseFloat(document.getElementById("risk").value);
+let pips = parseFloat(document.getElementById("pips").value);
+let rr = parseFloat(document.getElementById("rr").value);
+
+if(risk > 3){
+    alert("Maximum allowed risk is $3");
+    return;
+}
+
+if(!pips || pips <= 0){
+    alert("Enter valid Stop Loss");
+    return;
+}
+
+/* Correct Lot Calculation */
+let lot = risk / (pips * 10);
+lot = lot.toFixed(3);
+
+/* Reward */
+let reward = (risk * rr).toFixed(2);
+
+/* TP Pips */
+let tpPips = (pips * rr).toFixed(1);
+
+document.getElementById("output").innerHTML =
+"Lot Size: <span class='highlight'>" + lot + "</span><br><br>" +
+"Risk: $" + risk.toFixed(2) + "<br>" +
+"Reward: $" + reward + "<br>" +
+"Take Profit: " + tpPips + " pips";
+
+}
+
+</script>
+
+</body>
+</html>
